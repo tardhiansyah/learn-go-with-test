@@ -8,8 +8,7 @@ import (
 	"time"
 )
 
-const finalWord = "Go!"
-const countdownStart = 3
+const finalWord = "Go!\n"
 const write = "write"
 const sleep = "sleep"
 
