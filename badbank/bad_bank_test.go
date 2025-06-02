@@ -5,22 +5,26 @@ import (
 )
 
 func TestBadBank(t *testing.T) {
+	var (
+		riya  = Account{Name: "Riya", Balance: 100}
+		bob   = Account{Name: "Bob", Balance: 150}
+		alice = Account{Name: "Alice", Balance: 200}
+	)
+
 	transactions := []Transaction{
-		{
-			From: "Alice",
-			To:   "Bob",
-			Sum:  100,
-		},
-		{
-			From: "Adil",
-			To:   "Bob",
-			Sum:  50,
-		},
+		NewTransaction(riya, bob, 50),
+		NewTransaction(bob, alice, 30),
+		NewTransaction(alice, riya, 20),
 	}
 
-	AssertEqual(t, BalanceFor(transactions, "Bob"), 150)
-	AssertEqual(t, BalanceFor(transactions, "Alice"), -100)
-	AssertEqual(t, BalanceFor(transactions, "Adil"), -50)
+	newBalanceFor := func(account Account) float64 {
+		newAccountBalance := NewBalanceFor(transactions, account).Balance
+		return newAccountBalance
+	}
+
+	AssertEqual(t, newBalanceFor(riya), 70)
+	AssertEqual(t, newBalanceFor(bob), 170)
+	AssertEqual(t, newBalanceFor(alice), 210)
 }
 
 func AssertEqual[T comparable](t *testing.T, got, want T) {
